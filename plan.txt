@@ -1,0 +1,146 @@
+=== Tools ===
+Server
+	Node
+		Maple.js
+		Sandbox
+	
+Browser
+	HTML5
+		Maple.js
+
+=== Things to write ===
+ASCII gfx library
+HUD
+	-while exploring
+		-total number of symbols
+		-where you are
+	-while editing
+		-inventory
+		-current file
+	-command line
+Input handler for PC & mobile
+	-disable zooming
+	-disable scrolling
+	-allow multitouch
+Inventory
+Code editor
+Player entity
+	-move around
+	-mine
+	-build
+	
+=== Command Line ===
+exposes the API to the player.
+still uses symbols from the inventory.
+the user is stuck if they do not have sufficient symbols
+	
+=== API ===
+A note: all of the following functions have aliases that are much shorter
+
+//variables
+r.inventory[] = a representation of the robot's current inventory
+	one key for each symbol (i.e. r.i['@'])
+	each key points to how many of that symbol is in the inventory
+
+r.near[] = a copy of the symbols surrounding the robot
+
+r.file = the name of the current file
+
+//interaction functions
+r.move(direction) {
+	move robot in the given direction
+	up: "u"
+	down: "d"
+	left: "l"
+	right: "r"
+}
+
+r.dig(direction) {
+	dig in the given direction
+	successfully dug objects are put into the robot's inventory
+}
+
+r.place(direction, item) {
+	place item from the inventory on given side of robot
+	fails if no more of item are in the inventory
+}
+
+r.shoot(direction, file) {
+	fires symbols in the direction indicated from the file
+	symbols at the beginning of the file are fired first
+}
+
+r.trade(direction, file) {
+	just like r.shoot but will not do damage
+	also, will first try to enter a file named "swap" in correct order
+	if "swap" file is not found then will go into inventory
+}
+
+//internal functions
+r.createFile(filename) {
+	creates a new file with the given name if it doesn't already exist
+}
+
+r.renameFile(oldname, newname) {
+	renames the file with oldname if it exists to newname
+}
+
+r.delete(filename) {
+	deletes the file with the name filename if it exists
+	symbols go into the player's inventory
+}
+
+=== Random ideas ===
+-the time it takes to dig a given symbol is based on how many are not in
+	someone's inventory. This means the more scarce something is the longer
+	it takes to mine it.
+
+=== Things to keep in mind ===
+-the player entity must be used for robots too
+-sensitive information should not be stored client-side (no cheating)
+-text should be pre-rendered to speed up performance
+
+=== The inventories ===
+-each a combined inventory and text editor
+-they are just text files that can only be modified using the characters that are available.
+-special commands are used:
+	-create new file and name it
+	-delete an existing file (puts contents back into inventory)
+	-rename a file
+	
+=== Creating a robot ===
+1) pick a symbol from the inventory to serve as a body
+2) pick a program out of those you have for the robot to use
+3) select a "create a robot" option
+4) the robot appears one block in the direction you are facing
+
+=== Mechanisms for fighting ===
+-no fighting
+-bomberman
+-tanks
+-fire a symbol stream. a special space in the inventory can be loaded with characters.
+	the player/robot can then fire those characters like bullets. if they hit a player
+	then damage is done and the characters go into that player's files randomly, inserted wherever there is space.
+	if there is no space in the player then they die on one hit. the stream continues until it hits something
+	solid, at which point it stops, but it "globs" so it doesn't form a column.
+	
+	this can also be used for trade between players. allow the characters to be fired but
+	without damage being dealt. if the receiver's inventory is full they will still die though.
+
+=== Prototypes ===
+1) Players can explore a single area map together
+2) Viewable inventory
+3) Mining/building (blocks to and from inventory)
+4) Robot adaptation of player
+5) Control robot server-side
+6) Control robot server-side using client-provided script
+7) Simple text editor that can only use symbols from inventory
+
+=== Nice things ===
+-chat system
+	-r.chat for robots
+-welcome page
+	-introduction
+	-controls
+	-robot API
+-more powerful computer for the server
