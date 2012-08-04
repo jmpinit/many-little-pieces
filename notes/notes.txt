@@ -1,0 +1,10 @@
+Symbols cannot be created/destroyed
+
+players/robots essentially the same
+
+symbols used to program robot
+
+baisic api:
+	r.move(dir)
+	r.mine(dir)
+	r,attack(dir)
