@@ -136,4 +136,39 @@ srv.start({
 	port: 4000,
 	logicRate: 100
 });
+//       //////////////////////////////////////////////////////////////\
+//      //////////////////////////////////////////////////////////////--\
+//     //////////////////////////////////////////////////////////////----\
+//    /////////////SETUP STATIC HTTP SERVER/////////////////////////------\
+//   //////////////WARNING! VERY INSECURE!!////////////////////////--------\
+//  //////////////////////////////////////////////////////////////---------/
+// //////////////////////////////////////////////////////////////---------/
+////////////////////////////////////////////////////////////////---------/
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\--------/
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\------/
+
+var http = require('http');
+var fs = require('fs');
+ 
+http.createServer(function (request, response) {
+ 
+    console.log('request starting...');
+	//console.log(request);
+     
+    fs.readFile('../client'+request.url, function(error, content) {
+        if (error) {
+			console.log(error)
+            response.writeHead(500);
+            response.end();
+        }
+        else {
+			content = 'test'
+            response.writeHead(200, { 'Content-Type': 'text/htmls' });
+            response.end(content, 'utf-8');
+        }
+    });
+     
+}).listen(80);
+ 
+console.log('Server running at http://127.0.0.1/');
 
