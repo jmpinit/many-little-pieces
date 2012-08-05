@@ -3,8 +3,42 @@ var Maple = require('../Maple/Maple');
 var db = require('mongojs').connect('pieces');
 var world = db.collection('world');
 var users = db.collection('users');
+var sessions = db.collection('session');
 
 console.log("world initialized");
+
+var Players = new Array();
+
+function Player(x, y, connect) {
+	this.x = x;
+	this.y = y;
+	this.connect = connect;	
+}
+
+Player.prototype = {
+	moveUp: function() {
+	var query = { "loc" : [this.x , this.y +1] };
+	this.renderLoc(query);
+	},
+	moveDown: function() {
+	var query = { "loc" : [this.x  , this.y -1] };
+	this.renderLoc(query );
+	},
+	moveLeft: function() {
+	var query = { "loc" : [this.x - 1 , this.y] };
+	this.renderLoc(query );
+	},
+	moveRight: function() {
+	var query = { "loc" : [this.x +1 , this.y] };
+	this.renderLoc(query );
+	},
+	renderLoc: function( query ){
+			world.find(query, function(err, docs) {
+			srv.broadcast(protocol.type.WORLD, [docs[0]], [client]);
+			console.log("map sent");
+			});
+	}	
+}
 
 function commandLogic(type, data ){
 	
@@ -44,7 +78,6 @@ var PieceServer = Maple.Class(function(clientClass) {
 				world.save(chunkform);
 			}
 		}
-		
 		//create dummy player
 		users.save({
 			name: "nehal",
@@ -66,48 +99,76 @@ var PieceServer = Maple.Class(function(clientClass) {
 		console.log('Connected:', client.id);
 	},
 
-	message: function(client, type, tick, data) {
-		//console.log('Message:', client, type, tick);
-		console.log('Message:', data);
-		switch(type) {
-			case protocol.type.INIT:
-				users.find(data.name, function(err, docs) {
-					//if(docs[0].password==data.password) {
-						if(docs.length>0) {
-							var query = { "loc" : docs[0].loc};
-							console.log(query);		
-							world.find(query, function(err, docs) {
-							console.log(docs[0]);
-								srv.broadcast(protocol.INIT, [docs[0]], [client]);
-								console.log("map sent");
-							});
-						} else {
-							console.log("bad docs");
-						}
-					//} else {
-						//console.log("password failed. was "+data.password+" and should be "+docs[0].password);
-					//}
-				});
-				break;
-			case protocol.type.COMMAND:
-				console.log("Key Pressed");
-				console.log(data); 			
-				break;
-		}
-	},
-	requested: function(req, res) {
-		console.log('HTTP Request');
-	},
+message: function(client, type, tick, data) {
+				 console.log('ClientInfo:', client.id);
+				 console.log('Message:', data);
+				 switch(type) {
+						 case protocol.type.INIT:
+								 users.find(data.name, function(err, docs) {
+												 //if(docs[0].password==data.password) {
+												 if(docs.length>0) {
+												 var query = { "loc" : docs[0].loc};
+												 console.log(query);		
+												 world.find(query, function(err, docs) {
+														 console.log(docs[0]);
+														 srv.broadcast(protocol.INIT, [docs[0]], [client]);
+														 console.log("map sent");
+														 });
+												 //TODO check if we already have this player in list		
+												 new_player = Player(docs[0].loc[0],docs[0].loc[0],client);									    
+												 Players[Players.length] = new_player;		
+												 } else {
+												 console.log("bad docs");
+												 }
+												 //} else {
+												 //console.log("password failed. was "+data.password+" and should be "+docs[0].password);
+												 //}
+												 });
+								 break;
+						 case protocol.type.COMMAND:
+
+								 console.log("Key Pressed");
+								 //find the player in the list
+								 for (var i = 0 ;i <Players.length(); i = i + 1)
+								 {
+										 if (connect.id == Players[i].connect.id)
+										 {	
+												 switch(data.dir){
+														 case "U": // W up
+																 Players[i].moveUp();
+														 break;
+														 case "R": // D right
+																 Players[i].moveRight();
+														 break;
+														 case "D" : // S down
+																 Players[i].moveDown();
+														 break;
+														 case "L" : // A Left
+																 Players[i].moveLeft();
+														 break;
+												 }
+										 }	
+								 }
+								 console.log(data); 			
+								 break;
+				 }
+		 },
+requested: function(req, res) {
+				   console.log('HTTP Request');
+		   },
 
 	disconnected: function(client) {
+		
 		console.log('Disconnected:', client.id);
+		// TODO remove from list
 	}
 });
 
 var protocol = {
 	type: {
 		INIT: 1,
-		COMMAND: 2
+		COMMAND: 2,
+		WORLD : 3
 	} ,
 	cmd: {
 		MOVE: 1,

@@ -4,7 +4,7 @@ var loaded = false;
 var imgFont;
 var cvsGame, cvsInventory, cvsConsole;
 var scrnGame, scrnInventory, srcnConsole;
-var console;
+var con;
 
 //game data
 var world = new Array();
@@ -20,7 +20,7 @@ function eventLoaded() {
 	scrnInventory = new TextView(cvsInventory, Math.floor(cvsInventory.width/11), Math.floor(cvsInventory.height/13), imgFont, 11, 13);
 	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
 	
-	console = new Console(scrnConsole);
+	con = new Console(scrnConsole, function(command) { client.send(6, [ command ]); });
 	
 	loaded = true;
 }
@@ -43,6 +43,8 @@ var PieceClient = Class(function() {
     render: function(t, dt, u) {
 		if(loaded) {
 			scrnGame.render();
+			scrnConsole.render();
+			scrnInventory.render();
 		}
     },
 
@@ -56,8 +58,12 @@ var PieceClient = Class(function() {
 
     message: function(type, tick, data) {
         console.log('message:', type, tick, data);
-		var cmd = { name: "success"};
-		client.send(2, [ cmd ]);
+		
+		if(type==3 && data[0]) {
+			scrnGame.text = data[0];
+			scrnGame.dirty = true;
+		}
+		
         return true;
     },
 
@@ -75,25 +81,26 @@ var client = new PieceClient();
 client.connect('localhost', 4000);
 
 function keypress_command(keycode){
-	var cmd2 = { name: keycode};
+	var cmd2 = { dir: keycode};
 	client.send(2,[cmd2]);
 }
 
-$(document.body).keydown( function (evt) {
-	console.input(evt.keyCode);
+$(document).keydown( function (evt) {
+	con.input(evt.keyCode);
 
 	/*switch(evt.keyCode) {
 		case 87: // W up
-		keypress_command("UP")
+		keypress_command("U")
 		break;
 		case 68: // D right
-		keypress_command("Right");
+		keypress_command("R");
 		break;
 		case 83 : // S down
-		keypress_command("Down");
+		keypress_command("D");
 		break;
 		case 65 : // A Left
-		keypress_command("Left");
+		keypress_command("L");
 		break;
 	}*/
 });
+
