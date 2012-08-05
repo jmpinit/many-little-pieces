@@ -43,7 +43,13 @@ var PieceServer = Maple.Class(function(clientClass) {
 	},
 
 	message: function(client, type, tick, data) {
-		console.log('Message:', client, type, tick);
+		//console.log('Message:', client, type, tick);
+		console.log('Message:', data);
+		switch(type) {
+			case protocol.INIT:
+				this.broadcast(protocol.INIT, "test", [client]);
+				break;
+		}
 	},
 
 	requested: function(req, res) {
@@ -54,6 +60,10 @@ var PieceServer = Maple.Class(function(clientClass) {
 		console.log('Disconnected:', client.id);
 	}
 });
+
+var protocol = {
+	INIT: 1
+};
 
 var srv = new PieceServer();
 srv.start({
