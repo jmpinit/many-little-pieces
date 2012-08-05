@@ -1,4 +1,5 @@
 var loaded = false;
+var dirty = true;
 
 //constants
 var SYMBOL = {
@@ -16,19 +17,19 @@ var imgFont;
 var canvas;
 
 //game data
-var text = new Array();
+var world = new Array();
 
 function eventLoaded() {
 	imgFont = document.getElementById('img_font');
 	canvas = document.getElementById("game_screen");
 	
-	SCREEN.W = canvas.width/SYMBOL.W;
-	SCREEN.H = canvas.height/SYMBOL.H
+	SCREEN.W = canvas.width/SYMBOL.W-1;
+	SCREEN.H = canvas.height/SYMBOL.H-1;
 
 	//initialize the text array
 	for(var y=0; y<SCREEN.W; y++) {
 		for(var x=0; x<SCREEN.W; x++) {
-			text[y*SCREEN.W+x] = "a";
+			world[y*SCREEN.W+x] = "a";
 		}
 	}
 	
@@ -51,20 +52,18 @@ var PieceClient = Class(function() {
     },
 
     render: function(t, dt, u) {
-		if(loaded) {
+		if(loaded&&dirty) {
 			if(canvas.getContext) {
 				var ctx = canvas.getContext('2d');
 				
 				ctx.clearRect(0, 0, 512, 512);
 				
-				this.putText(ctx, 10, 10, "a");
-				
-				/*ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-				ctx.fillRect (30, 30, 55, 50);
-				
-				ctx.fillRect(0, 0, 100, 100);
-				
-				ctx.drawImage(imgFont, 0, 0, 11, 13, 0, 0, 11, 13);*/
+				for(var y=0; y<SCREEN.H; y++) {
+					for(var x=0; x<SCREEN.W; x++) {
+						this.putText(ctx, x*SYMBOL.W, y*SYMBOL.H, world[y*SCREEN.W+x]);
+					}
+				}
+				dirty = false;
 			}
 		}
     },
@@ -98,8 +97,6 @@ var PieceClient = Class(function() {
 		if(i>=0 && i<=94) {
 			var row = Math.floor(i/10);
 			var col = i-row*10;
-			
-			alert(row+", "+col);
 			
 			ctx.drawImage(imgFont, col*SYMBOL.W, row*SYMBOL.H, SYMBOL.W, SYMBOL.H, x, y, SYMBOL.W, SYMBOL.H);
 		}
