@@ -1,24 +1,10 @@
 var Maple = require('../Maple/Maple');
 
-/*var db = require('mongojs').connect('pieces');
+var db = require('mongojs').connect('pieces');
 var world = db.collection('world');
+var users = db.collection('users');
 
-//drop the existing chunks
-world.drop();
-
-//create some chunks
-for(var y=0; y<8; y++) {
-	for(var x=0; x<8; x++) {
-		var chunkform = { loc: { x: 0, y: 0 }, data: "" };
-		chunkform.x = x;
-		chunkform.y = y;
-		
-		for(var i=0; i<32*32; i++) { chunkform.data += String.charFromCode(Math.floor(Math.random()*97+32));
-		world.save(chunk);
-	}
-}
-
-console.log("things happened");*/
+console.log("world initialized");
 
 var PieceServer = Maple.Class(function(clientClass) {
 	Maple.Server(this, clientClass);
@@ -27,10 +13,37 @@ var PieceServer = Maple.Class(function(clientClass) {
 
 	started: function() {
 		console.log('Started');
+		
+		//drop the existing chunks
+		world.drop();
+
+		//create some chunks
+		for(var y=0; y<8; y++) {
+			for(var x=0; x<8; x++) {
+				var chunkform = { loc: { x: 0, y: 0 }, data: "" };
+				chunkform.x = x*world_info.SCREEN_W;
+				chunkform.y = y*world_info.SCREEN_H;
+				
+				for(var i=0; i<world_info.SCREEN_H*world_info.SCREEN_W; i++) {
+					chunkform.data += "X";//world_info.characters[Math.floor(Math.random()*96+32];
+				}
+				world.save(chunkform);
+			}
+		}
+		
+		//create dummy player
+		users.save({
+			name: "nehal",
+			password: "password",
+			loc: {
+				x: 4,
+				y: 4
+			}
+		});
 	},
 
 	update: function(t, tick) {
-		this.broadcast(5, ['Hello World']);
+		//this.broadcast(5, ['Hello World']);
 		//console.log(this.getClients().length, 'client(s) connected', t, tick, this.getRandom());
 	},
 
@@ -47,7 +60,22 @@ var PieceServer = Maple.Class(function(clientClass) {
 		console.log('Message:', data);
 		switch(type) {
 			case protocol.INIT:
-				this.broadcast(protocol.INIT, "test", [client]);
+				
+				users.find(data.name, function(err, docs) {
+					//if(docs[0].password==data.password) {
+						if(docs.length>0) {
+							world.find(docs[0].loc, function(err, docs) {
+								this.broadcast(protocol.INIT, [docs[0]], [client]);
+								console.log("map sent");
+							});
+						} else {
+							console.log("bad docs");
+						}
+					//} else {
+						//console.log("password failed. was "+data.password+" and should be "+docs[0].password);
+					//}
+				});
+				
 				break;
 		}
 	},
@@ -63,6 +91,11 @@ var PieceServer = Maple.Class(function(clientClass) {
 
 var protocol = {
 	INIT: 1
+};
+
+var world_info = {
+	SCREEN_W: 32,
+	SCREEN_H: 32
 };
 
 var srv = new PieceServer();
