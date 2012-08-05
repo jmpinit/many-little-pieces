@@ -110,19 +110,25 @@ var protocol = {
 		COMMAND: 2
 	} ,
 	cmd: {
-		MOVE_UP: 1,
-		MOVE_DOWN: 2,
-		MOVE_LEFT: 3 ,
-		MOVE_RIGHT: 4 ,	
+		MOVE: 1,
+		MINE: 2
+	},
+	dir: {
+		NA: 0, // meaning doesn't apply
+		UP: 1,
+		DOWN: 2,
+		LEFT: 3,
+		RIGHT: 4
 	}
 };
 
 var commands = {
-		
+		//?????? WHAT GOES HERE?????
 }
 var world_info = {
 	SCREEN_W: 32,
-	SCREEN_H: 32
+	SCREEN_H: 32,
+	BLOCK_CHARS: "qwertyuiop[]\\asdfghkl;zxcvbnm,./1234567890-=!@$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?" //purposely doesn't include #, reserved for robots/players
 };
 
 var srv = new PieceServer();
