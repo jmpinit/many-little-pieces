@@ -10,14 +10,29 @@ body{
 	color: white;
 }
 
+#main {
+	width: 758px;
+	margin: 0 auto;
+}
+
 h1{
 	font-size: 50px;
 }
 
 canvas {
 	border: white 5px solid;
+	margin: 5px;
+}
+
+#console, #game_screen {
+	float: left;
 }
 
 th{
 	width: 1em;
 }
+
+#img_font{
+	display: none;
+}
+
