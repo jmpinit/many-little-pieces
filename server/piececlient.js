@@ -4,8 +4,7 @@ var loaded = false;
 var imgFont;
 var cvsGame, cvsInventory, cvsConsole;
 var scrnGame, scrnInventory, srcnConsole;
-var con, inventory;
-var focus = "game";
+var con;
 
 //game data
 var world = new Array();
@@ -21,15 +20,10 @@ function eventLoaded() {
 	scrnInventory = new TextView(cvsInventory, Math.floor(cvsInventory.width/11), Math.floor(cvsInventory.height/13), imgFont, 11, 13);
 	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
 	
-	inventory = new Inventory(scrnInventory);
-	
-	con = new Console(scrnConsole, function(command) { client.send(4, [ command ]); });
+	con = new Console(scrnConsole, function(command) { client.send(6, [ command ]); });
 	
 	loaded = true;
 }
-
-function focusOnConsole() { focus = "console"; }
-function focusOnGame() { focus = "game"; }
 
 var PieceClient = Class(function() {
     Maple.Client(this, 30, 60);
@@ -76,12 +70,9 @@ var PieceClient = Class(function() {
 			
 			var enemies = JSON.parse(data[0]);
 			
-			inventory.buffer = "";
 			for(var i in enemies) {
 				scrnGame.putText(enemies[i].x, enemies[i].y, "*");
-				inventory.buffer += enemies[i].inventory;
 			}
-			inventory.print();
 			
 			scrnGame.dirty = true;
 		}
@@ -99,6 +90,7 @@ var PieceClient = Class(function() {
 });
 
 var client = new PieceClient();
+//client.connect('192.168.137.165', 4000);
 client.connect('localhost', 4000);
 
 function keypress_command(keycode){
@@ -107,23 +99,21 @@ function keypress_command(keycode){
 }
 
 $(document).keydown( function (evt) {
-	if(focus=="console") {
-		con.input(evt.keyCode);
-	} else {
-		switch(evt.keyCode) {
-			case 87: // W up
-				keypress_command("U")
-				break;
-			case 68: // D right
-				keypress_command("R");
-				break;
-			case 83 : // S down
-				keypress_command("D");
-				break;
-			case 65 : // A Left
-				keypress_command("L");
-				break;
-		}
+	//con.input(evt.keyCode);
+
+	switch(evt.keyCode) {
+		case 87: // W up
+			keypress_command("U")
+			break;
+		case 68: // D right
+			keypress_command("R");
+			break;
+		case 83 : // S down
+			keypress_command("D");
+			break;
+		case 65 : // A Left
+			keypress_command("L");
+			break;
 	}
 });
 

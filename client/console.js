@@ -11,12 +11,14 @@ Console.prototype = {
 			switch(code) {
 				case 13:	//ENTER
 					this.process(this.buffer);
+					this.buffer = "";
+					this.screen.clearText();
 					break;
 				case 8:		//BACKSPACE
 					this.buffer = "";
-					this.screen.clear();
+					this.screen.clearText();
 					break;
-				default:
+				case code>=32||code<=129:
 					this.buffer += String.fromCharCode(code);
 					this.print();
 					
@@ -33,7 +35,8 @@ Console.prototype = {
 			
 			x++;
 			if(x>this.screen.width) {
-				y = 0;
+				y++;
+				x = 0;
 			}
 		}
 		
