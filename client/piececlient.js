@@ -76,7 +76,8 @@ function keypress_command(keycode){
 	client.send(2,[cmd2]);
 }
 
-$(document.body).keydown( function (evt) {
+//$("#game_screen").keydown( function (evt) {
+$(document).keydown( function (evt) {
 
 	switch(evt.keyCode) {
 		case 87: // W up
