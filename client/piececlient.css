@@ -24,7 +24,7 @@ canvas {
 	margin: 5px;
 }
 
-#console, #game_screen {
+#console_screen, #game_screen {
 	float: left;
 }
 
