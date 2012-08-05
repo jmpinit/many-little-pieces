@@ -11,7 +11,8 @@ body{
 }
 
 #main {
-	
+	width: 758px;
+	margin: 0 auto;
 }
 
 h1{
@@ -20,6 +21,11 @@ h1{
 
 canvas {
 	border: white 5px solid;
+	margin: 5px;
+}
+
+#console, #game_screen {
+	float: left;
 }
 
 th{
