@@ -16,26 +16,62 @@ function Player(x, y, connect) {
 }
 
 Player.prototype = {
-	moveUp: function() {
-	var query = { "loc" : [this.x , this.y +1] };
-	this.renderLoc(query);
+	moveUp: function(connect) {
+	var query = { "loc" : [this.x , this.y ] };
+		world.find(query, function(err, docs) {
+			if(docs.length != 0){
+			srv.broadcast(protocol.type.WORLD, [docs[0]], [connect]);
+			console.log("map sent");
+			} else {
+			console.log("Bad Input"+connect.id);
+			}
+			});
+
 	},
-	moveDown: function() {
-	var query = { "loc" : [this.x  , this.y -1] };
-	this.renderLoc(query );
+	moveDown: function(connect) {
+	var query = { "loc" : [this.x  , this.y ] };
+	world.find(query, function(err, docs) {
+			if(docs.length != 0){
+			srv.broadcast(protocol.type.WORLD, [docs[0]], [connect]);
+			console.log("map sent");
+			} else {
+			console.log("Bad Input"+connect.id);
+			}
+			});
+   },
+	moveLeft: function(connect) {
+	var query = { "loc" : [this.x , this.y] };
+	world.find(query, function(err, docs) {
+			if(docs.length != 0){
+			srv.broadcast(protocol.type.WORLD, [docs[0]], connect);
+			console.log("map sent");
+			} else {
+			console.log("Bad Input"+connect.id);
+			}
+			});
+	
 	},
-	moveLeft: function() {
-	var query = { "loc" : [this.x - 1 , this.y] };
-	this.renderLoc(query );
-	},
-	moveRight: function() {
-	var query = { "loc" : [this.x +1 , this.y] };
-	this.renderLoc(query );
+	moveRight: function(connect) {
+	var query = { "loc" : [this.x , this.y] };
+	world.find(query, function(err, docs) {
+			if(docs.length != 0){
+			   srv.broadcast(protocol.type.WORLD, [docs[0]], [connect]);
+			   console.log("map sent");
+			} else {
+			console.log("Bad Input"+connect.id);
+			}
+			});
+	//this.renderLoc(query );
 	},
 	renderLoc: function( query ){
+		 console.log("In render Loc");
 			world.find(query, function(err, docs) {
-			srv.broadcast(protocol.type.WORLD, [docs[0]], [client]);
+			if(docs.length != 0){
+			srv.broadcast(protocol.type.WORLD, [docs[0]], [this.connect]);
 			console.log("map sent");
+			} else {
+			console.log("Bad Input"+connect.id);
+			}
 			});
 	}	
 }
@@ -115,41 +151,41 @@ message: function(client, type, tick, data) {
 														 console.log("map sent");
 														 });
 												 //TODO check if we already have this player in list		
-												 new_player = Player(docs[0].loc[0],docs[0].loc[0],client);									    
-												 Players[Players.length] = new_player;		
-												 } else {
-												 console.log("bad docs");
-												 }
-												 //} else {
-												 //console.log("password failed. was "+data.password+" and should be "+docs[0].password);
-												 //}
+												new_player = new Player(docs[0].loc[0],docs[0].loc[0],client); 
+												Players.push(new_player);		
+												console.log("NEw plyaer added "+ Players.length);
+												 
+												} 
 												 });
 								 break;
 						 case protocol.type.COMMAND:
 
-								 console.log("Key Pressed");
+								 console.log("Key Pressed ");
+								 console.log(data[0].dir); 			
 								 //find the player in the list
-								 for (var i = 0 ;i <Players.length(); i = i + 1)
+								 for (var i in Players)
 								 {
-										 if (connect.id == Players[i].connect.id)
+										 if (  client.id == Players[i].connect.id)
 										 {	
-												 switch(data.dir){
-														 case "U": // W up
-																 Players[i].moveUp();
+												 switch(data[0].dir){
+														 case 'U': // W up
+															Players[i].moveUp(client);
 														 break;
-														 case "R": // D right
-																 Players[i].moveRight();
+														 case 'R': // D right
+															Players[i].moveRight(client);
 														 break;
-														 case "D" : // S down
-																 Players[i].moveDown();
+														 case 'D': // S down
+															Players[i].moveDown(client);
 														 break;
-														 case "L" : // A Left
-																 Players[i].moveLeft();
+														 case 'L' : // A Left
+															Players[i].moveLeft(client);
 														 break;
+														default:
+															Players[i].moveLeft(client);
+					
 												 }
 										 }	
 								 }
-								 console.log(data); 			
 								 break;
 				 }
 		 },
@@ -157,11 +193,11 @@ requested: function(req, res) {
 				   console.log('HTTP Request');
 		   },
 
-	disconnected: function(client) {
-		
-		console.log('Disconnected:', client.id);
-		// TODO remove from list
-	}
+disconnected: function(client) {
+
+					  console.log('Disconnected:', client.id);
+					  // TODO remove from list
+			  }
 });
 
 var protocol = {

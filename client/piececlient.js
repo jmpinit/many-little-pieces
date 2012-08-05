@@ -30,9 +30,8 @@ var PieceClient = Class(function() {
 }, Maple.Client, {
     started: function() {
 		console.log("started");
-
 		//authenticate with server
-		client.send(1, [ {name: "nehal", password: "password"} ]);
+		client.send(protocol.type.INIT, [ {name: "nehal", password: "password"} ]);
 		client._state = 0;
 	},
 
@@ -59,7 +58,7 @@ var PieceClient = Class(function() {
     message: function(type, tick, data) {
         console.log('message:', type, tick, data);
 		
-		if(type==3 && data[0]) {
+		if(type == protocol.type.WORLD  && data[0]) {
 			scrnGame.text = data[0];
 			scrnGame.dirty = true;
 		}
@@ -82,13 +81,13 @@ client.connect('localhost', 4000);
 
 function keypress_command(keycode){
 	var cmd2 = { dir: keycode};
-	client.send(2,[cmd2]);
+	client.send(protocol.type.COMMAND,[cmd2]);
 }
 
 $(document).keydown( function (evt) {
-	con.input(evt.keyCode);
+	//con.input(evt.keyCode);
 
-	/*switch(evt.keyCode) {
+	switch(evt.keyCode) {
 		case 87: // W up
 		keypress_command("U")
 		break;
@@ -100,7 +99,24 @@ $(document).keydown( function (evt) {
 		break;
 		case 65 : // A Left
 		keypress_command("L");
-		break;
-	}*/
+		break;}
 });
 
+var protocol = {
+	type: {
+		INIT: 1,
+		COMMAND: 2,
+		WORLD : 3
+	} ,
+	cmd: {
+		MOVE: 1,
+		MINE: 2
+	},
+	dir: {
+		NA: 0, // meaning doesn't apply
+		UP: 1,
+		DOWN: 2,
+		LEFT: 3,
+		RIGHT: 4
+	}
+};
