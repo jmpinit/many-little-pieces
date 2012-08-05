@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html><!--NOT WORKING!!!!-->
 <html>
 	<head>
 		<title>many-little-pieces</title>
@@ -147,32 +147,17 @@
 		
 		<script src="piececlient.js"></script>
         <script type="text/javascript">
-			var canvas = document.getElementById('mainCanvas');
-			var ctx = canvas.getContext('2d');
-			CanvasTextFunctions.enable(ctx);
-			
-			ctx.clearRect(0,0,canvas.width,canvas.height);
-			ctx.fillStyle = "rgba(0,0,0,0.66)";
-			ctx.fillRect(0,0,canvas.width,canvas.height);
-			
-			var y = ctx.fontAscent("sans",16);
-			ctx.strokeStyle = "rgba(255,255,255,0.75)";
-			//ctx.drawText("sans",16,canvas.width/2,y,"Canvas Text Functions");
-			window.piecesConsole = new Object();
-			window.piecesConsole.maxX = 64;//number of characters wide
-			window.piecesConsole.maxY = 64;//number of characters tall
-			window.piecesConsole.charSize = 8;
-			
-			window.piecesConsole.clear = function(){
-				ctx.clearRect(0,0,canvas.width,canvas.height);
+			field = document.getElementById('field');
+			function display(str){
+				processed = ''
+				width = parseInt(Math.sqrt(str.length))
+				for(var i=0;i<str.length;i++){ //this starts at 0
+					if(i%width == 0) processed += "<br />\n"; //and this adds a return before the 8 index(9th char), therefor after the 8th char
+					processed += str.charAt(i)
+				}
+				field.innerHTML = processed
 			}
-			window.piecesConsole.setchar = function(x,y,char){
-				cS = window.piecesConsole.charSize;
-				ctx.clearRect((x-1)*cS,(y-1)*cS,x*cS,y*cS);
-				ctx.drawTextCenter("sans",cS,(x-0.5)*cS,y*cS,char);
-			}
-			//window.piecesConsole.setAll = function(char) {
-			
 		</script>
-	</body>
+		<script src="piececlient.js"></script>
+	</center></body>
 </html>
