@@ -46,7 +46,7 @@ TextView.prototype = {
 		for(var i=0; i<this.text.length; i++) {
 			this.text = " ";
 		}
-	}
+	},
 	
     drawText: function(ctx, x, y, c) {
 		var i = c.charCodeAt(0)-32;

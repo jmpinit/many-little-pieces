@@ -20,7 +20,7 @@ function eventLoaded() {
 	scrnInventory = new TextView(cvsInventory, Math.floor(cvsInventory.width/11), Math.floor(cvsInventory.height/13), imgFont, 11, 13);
 	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
 	
-	con = new Console(scrnConsole, function(command) { client.send(1, [ command ]); });
+	con = new Console(scrnConsole, function(command) { client.send(6, [ command ]); });
 	
 	loaded = true;
 }
@@ -58,8 +58,12 @@ var PieceClient = Class(function() {
 
     message: function(type, tick, data) {
         console.log('message:', type, tick, data);
-		var cmd = { name: "success"};
-		client.send(2, [ cmd ]);
+		
+		if(type==3 && data[0]) {
+			scrnGame.text = data[0];
+			scrnGame.dirty = true;
+		}
+		
         return true;
     },
 

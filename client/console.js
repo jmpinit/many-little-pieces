@@ -10,18 +10,16 @@ Console.prototype = {
 		if(this.buffer.length<=this.limit) {
 			switch(code) {
 				case 13:	//ENTER
-					alert("ENTER");
-					this.process();
+					this.process(this.buffer);
 					break;
 				case 8:		//BACKSPACE
 					this.buffer = "";
 					this.screen.clear();
 					break;
 				default:
-					//alert(code);
 					this.buffer += String.fromCharCode(code);
 					this.print();
-					this.processor(this.buffer);
+					
 					break;
 			}
 		}
