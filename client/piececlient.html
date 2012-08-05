@@ -10,12 +10,20 @@
         <script type="text/javascript" charset="utf-8" src="../Maple/Client.js"></script>
         
 	</head>
-	<body bgcolor="black">
-		<p style="font:'Courier New', Courier, monospace;" id="field"></p>
+	<body bgcolor="black"><center>
+		<p style="font-family:'Courier New', Courier, monospace; color:#FFFFFF;" id="field"></p>
         <script type="text/javascript">
 			field = document.getElementById('field');
-			function 
+			function display(str){
+				processed = ''
+				width = parseInt(Math.sqrt(str.length))
+				for(var i=0;i<str.length;i++){ //this starts at 0
+					if(i%width == 0) processed += "<br />\n"; //and this adds a return before the 8 index(9th char), therefor after the 8th char
+					processed += str.charAt(i)
+				}
+				field.innerHTML = processed
+			}
 		</script>
 		<script src="piececlient.js"></script>
-	</body>
+	</center></body>
 </html>
