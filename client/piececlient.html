@@ -8,9 +8,25 @@
         <script type="text/javascript" charset="utf-8" src="../lib/Twist.js"></script>
         <script type="text/javascript" charset="utf-8" src="../Maple.js"></script>
         <script type="text/javascript" charset="utf-8" src="../Client.js"></script>
+        <script type="text/javascript" src="http://jim.studt.net/canvastext/canvastext.js"></script>
+        
 	</head>
 	<body bgcolor="black">
 		<font face="Courier New" color="#00CC00" size=2><p id="field"></p></font>
+        <canvas align="center" id="mainCanvas" width="512" height="512"></canvas>
 		<script src="piecesclient.js"></script>
+        <script type="text/javascript">
+			var canvas = document.getElementById('mainCanvas');
+			var ctx = canvas.getContext('2d');
+			CanvasTextFunctions.enable(ctx);
+			
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			ctx.fillStyle = "rgba(0,0,0,0.66)";
+			ctx.fillRect(0,0,canvas.width,canvas.height);
+			
+			var y = ctx.fontAscent("sans",16);
+			ctx.strokeStyle = "rgba(255,255,255,0.75)";
+			ctx.drawText("sans",16,canvas.width/2,y,"Canvas Text Functions");
+		</script>
 	</body>
 </html>
