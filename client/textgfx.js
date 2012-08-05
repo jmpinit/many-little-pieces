@@ -1,130 +1,46 @@
-function TextView(w, h) {
+function TextView(cvs, w, h, img, sw, sh) {
+	this.canvas = cvs;
+	
 	this.width = w;
 	this.height = h;
 	
-	//load thefont
-	fontImage.src = "imgs/the_pieces.png";
- 
-	//check for being fully loaded
-	this.ready = false;
-	window.addEventListener("load", function(this.ready=true;); 
- 
-	function init(){
-		//we're ready for the loop
-		setInterval(loop, 1000 / 30);
-	}
+	this.symWidth = sw;
+	this.symHeight = sh;
 	
-	this.map = new Array();
+	this.font = img;
+	
+	this.text = new Array();
+	
+	this.dirty = true;
+	
+	//initialize the text array
+	for(var y=0; y<this.height; y++) {
+		for(var x=0; x<this.width; x++) {
+			world[y*this.width+x] = "a";
+		}
+	}
 }
 
 TextView.prototype = {
-	clear: function() {
-		for(var y=0; y<this.height; y++) {
-			for(var x=0; x<this.width; x++) {
-				this.map[y*this.width+x] = " ";
-			}
-		}
-	},
-	
-	texel: function(x, y, c) {
-		if(c.length==1) {
-			if(x>=0&&x<this.width&&y>=0&&y<this.height) {
-				this.map[y*this.width+x] = c;
-			}
-		}
-	},
-	
-	write: function(x, y, str) {
-		for(var i=0; i<str.length; i++) {
-			this.texel(x+i, y, str.charAt(i));
-		}
-	},
-	
-	rect: function(x, y, width, height, c) {
-		//draw a rectangle at this position
-		//using this character
-	},
-	
-	image: function(x, y, img) {
-		for(var offY=0; offY<img.height; offY++) {
-			for(var offX=0; offX<img.width; offX++) {
-				var c = img.map[offY*img.width+offX];
-				
-				if(typeof c !== 'undefined') {
-					this.texel(x+offX, y+offY, c);
-				}
-			}
-		}
-	},
-	
-	//return a string representing this vistext
 	render: function() {
-		var text = "";
-		for(var y=0; y<this.height; y++) {
-			for(var x=0; x<this.width; x++) {
-				var c = this.map[y*this.width+x];
-				if(typeof c !== 'undefined') {
-					if(c==" ") {
-						text += "&nbsp;";
-					} else {
-						text += c;
-					}
-				} else {
-					text += "X";
+		if(this.dirty&&this.canvas.getContext) {
+			var ctx = this.canvas.getContext('2d');
+			
+			for(var y=0; y<this.height; y++) {
+				for(var x=0; x<this.width; x++) {
+					this.putText(ctx, x*this.symWidth, y*this.symHeight, world[y*this.width+x]);
 				}
 			}
-			text += "<br>";
 		}
-		
-		return text;
-	}
-}
-
-function TextImage(packed) {
-	this.map = new Array();
+	},
 	
-	//get the width and height
-	var x = 0;
-	var y = 0;
-	this.width = 0;
-	this.height = 0;
-	for(var i=0; i<packed.length; i++) {
-		var c = packed.charAt(i);
-		if(c=='\n') {
-			y++;
-			x = 0;
-		} else {
-			x++;
+    putText: function(ctx, x, y, c) {
+		var i = c.charCodeAt(0)-32;
+		if(i>=0 && i<=94) {
+			var row = Math.floor(i/10);
+			var col = i-row*10;
+			
+			ctx.drawImage(this.font, col*this.symWidth, row*this.symHeight, this.symWidth, this.symHeight, x, y, this.symWidth, this.symHeight);
 		}
-		
-		if(x>this.width) {
-			this.width = x;
-		}
-	}
-	
-	this.width++;
-	this.height = y+1;
-	
-	//construct map
-	x = 0;
-	y = 0;
-	for(var i=0; i<packed.length; i++) {
-		var c = packed.charAt(i);
-		
-		if(c=='\n') {
-			y++;
-			x = 0;
-		} else if(c=="'") {		//transparent
-			x++;
-		} else {
-			this.map[y*this.width+x] = c;
-			x++;
-		}
-	}
-}
-
-TextImage.prototype = {
-	getTexel: function(x, y) {
-		return this.map[y*this.width+x];
 	}
 }
