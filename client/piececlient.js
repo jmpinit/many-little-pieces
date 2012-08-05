@@ -4,6 +4,7 @@ var loaded = false;
 var imgFont;
 var cvsGame, cvsInventory, cvsConsole;
 var scrnGame, scrnInventory, srcnConsole;
+var console;
 
 //game data
 var world = new Array();
@@ -18,6 +19,8 @@ function eventLoaded() {
 	scrnGame = new TextView(cvsGame, Math.floor(cvsGame.width/11), Math.floor(cvsGame.height/13), imgFont, 11, 13);
 	scrnInventory = new TextView(cvsInventory, Math.floor(cvsInventory.width/11), Math.floor(cvsInventory.height/13), imgFont, 11, 13);
 	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
+	
+	console = new Console(scrnConsole);
 	
 	loaded = true;
 }
@@ -77,8 +80,9 @@ function keypress_command(keycode){
 }
 
 $(document.body).keydown( function (evt) {
+	console.input(evt.keyCode);
 
-	switch(evt.keyCode) {
+	/*switch(evt.keyCode) {
 		case 87: // W up
 		keypress_command("UP")
 		break;
@@ -91,5 +95,5 @@ $(document.body).keydown( function (evt) {
 		case 65 : // A Left
 		keypress_command("Left");
 		break;
-	}
+	}*/
 });
