@@ -106,3 +106,27 @@ var PieceClient = Class(function() {
 var client = new PieceClient();
 //client.connect('192.168.137.165', 4000);
 client.connect('localhost', 4000);
+
+function keypress_command(keycode){
+	var cmd2 = { name: keycode};
+	client.send(2,[cmd2]);
+}
+
+
+$(document.body).keydown( function (evt) {
+
+	switch(evt.keyCode) {
+		case 87: // W up
+		keypress_command("UP")
+		break;
+		case 68: // D right
+		keypress_command("Right");
+		break;
+		case 83 : // S down
+		keypress_command("Down");
+		break;
+		case 65 : // A Left
+		keypress_command("Left");
+		break;
+	}
+});
