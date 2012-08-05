@@ -112,7 +112,6 @@ function keypress_command(keycode){
 	client.send(2,[cmd2]);
 }
 
-
 $(document.body).keydown( function (evt) {
 
 	switch(evt.keyCode) {
