@@ -16,7 +16,7 @@ function TextView(cvs, w, h, img, sw, sh) {
 	//initialize the text array
 	for(var y=0; y<this.height; y++) {
 		for(var x=0; x<this.width; x++) {
-			world[y*this.width+x] = "a";
+			this.text[y*this.width+x] = " ";
 		}
 	}
 }
@@ -26,15 +26,29 @@ TextView.prototype = {
 		if(this.dirty&&this.canvas.getContext) {
 			var ctx = this.canvas.getContext('2d');
 			
+			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			
 			for(var y=0; y<this.height; y++) {
 				for(var x=0; x<this.width; x++) {
-					this.putText(ctx, x*this.symWidth, y*this.symHeight, world[y*this.width+x]);
+					this.drawText(ctx, x*this.symWidth, y*this.symHeight, this.text[y*this.width+x]);
 				}
 			}
 		}
 	},
 	
-    putText: function(ctx, x, y, c) {
+	putText: function(x, y, c) {
+		if(c.length==1) {
+			this.text[y*this.width+x] = c;
+		}
+	},
+	
+	clearText: function() {
+		for(var i=0; i<this.text.length; i++) {
+			this.text = " ";
+		}
+	}
+	
+    drawText: function(ctx, x, y, c) {
 		var i = c.charCodeAt(0)-32;
 		if(i>=0 && i<=94) {
 			var row = Math.floor(i/10);

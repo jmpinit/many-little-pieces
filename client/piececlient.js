@@ -4,7 +4,7 @@ var loaded = false;
 var imgFont;
 var cvsGame, cvsInventory, cvsConsole;
 var scrnGame, scrnInventory, srcnConsole;
-var console;
+var con;
 
 //game data
 var world = new Array();
@@ -20,7 +20,7 @@ function eventLoaded() {
 	scrnInventory = new TextView(cvsInventory, Math.floor(cvsInventory.width/11), Math.floor(cvsInventory.height/13), imgFont, 11, 13);
 	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
 	
-	console = new Console(scrnConsole);
+	con = new Console(scrnConsole, function(command) { client.send(1, [ command ]); });
 	
 	loaded = true;
 }
@@ -43,6 +43,8 @@ var PieceClient = Class(function() {
     render: function(t, dt, u) {
 		if(loaded) {
 			scrnGame.render();
+			scrnConsole.render();
+			scrnInventory.render();
 		}
     },
 
@@ -79,8 +81,8 @@ function keypress_command(keycode){
 	client.send(2,[cmd2]);
 }
 
-$(document.body).keydown( function (evt) {
-	console.input(evt.keyCode);
+$(document).keydown( function (evt) {
+	con.input(evt.keyCode);
 
 	/*switch(evt.keyCode) {
 		case 87: // W up
