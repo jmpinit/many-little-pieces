@@ -40,4 +40,5 @@ var PieceClient = Class(function() {
 });
 
 var client = new PieceClient();
-client.connect('192.168.137.165', 4000);
+//client.connect('192.168.137.165', 4000);
+client.connect('localhost', 4000);

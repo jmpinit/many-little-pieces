@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "c64";
+    src: url(C64_User_v1.0-STYLE.ttf);
+}
+
+
+body{
+	font-family: 'c64', sans-serif;
+	text-align: center;
+	color: white;
+}
+
+h1{
+	font-size: 25px;
+}
