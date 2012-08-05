@@ -81,7 +81,7 @@ var client = new PieceClient();
 client.connect('localhost', 4000);
 
 function keypress_command(keycode){
-	var cmd2 = { name: keycode};
+	var cmd2 = { dir: keycode};
 	client.send(2,[cmd2]);
 }
 
@@ -90,16 +90,17 @@ $(document).keydown( function (evt) {
 
 	/*switch(evt.keyCode) {
 		case 87: // W up
-		keypress_command("UP")
+		keypress_command("U")
 		break;
 		case 68: // D right
-		keypress_command("Right");
+		keypress_command("R");
 		break;
 		case 83 : // S down
-		keypress_command("Down");
+		keypress_command("D");
 		break;
 		case 65 : // A Left
-		keypress_command("Left");
+		keypress_command("L");
 		break;
 	}*/
 });
+
