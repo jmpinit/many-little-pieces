@@ -3,6 +3,8 @@ var PieceClient = Class(function() {
 }, Maple.Client, {
     started: function() {
         console.log("started");
+	client.send(1, [ {name: "nehal", password: "password"} ]);
+        client._state = 0;
     },
 
     update: function(t, tick) {
@@ -23,6 +25,8 @@ var PieceClient = Class(function() {
 
     message: function(type, tick, data) {
         console.log('message:', type, tick, data);
+	var cmd = { name: "success"};
+	client.send(2, [ cmd ]);
         return true; // return true to mark this message as handled
     },
 
