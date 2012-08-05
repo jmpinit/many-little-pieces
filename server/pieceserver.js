@@ -20,9 +20,8 @@ var PieceServer = Maple.Class(function(clientClass) {
 		//create some chunks
 		for(var y=0; y<8; y++) {
 			for(var x=0; x<8; x++) {
-				var chunkform = { loc: { x: 0, y: 0 }, data: "" };
-				chunkform.x = x*world_info.SCREEN_W;
-				chunkform.y = y*world_info.SCREEN_H;
+				var chunkform = { loc: [ ], data: "" };
+				chunkform.loc = [ x*world_info.SCREEN_W ,chunkform.loc.y = y*world_info.SCREEN_H] ;
 				
 				for(var i=0; i<world_info.SCREEN_H*world_info.SCREEN_W; i++) {
 					chunkform.data += "X";//world_info.characters[Math.floor(Math.random()*96+32];
@@ -35,10 +34,7 @@ var PieceServer = Maple.Class(function(clientClass) {
 		users.save({
 			name: "nehal",
 			password: "password",
-			loc: {
-				x: 4,
-				y: 4
-			}
+			loc: [ 32,128 ]
 		});
 	},
 
@@ -60,12 +56,14 @@ var PieceServer = Maple.Class(function(clientClass) {
 		console.log('Message:', data);
 		switch(type) {
 			case protocol.INIT:
-				
 				users.find(data.name, function(err, docs) {
 					//if(docs[0].password==data.password) {
 						if(docs.length>0) {
-							world.find(docs[0].loc, function(err, docs) {
-								this.broadcast(protocol.INIT, [docs[0]], [client]);
+							var query = { "loc" : docs[0].loc};
+							console.log(query);		
+							world.find(query, function(err, docs) {
+							console.log(docs[0]);
+								srv.broadcast(protocol.INIT, [docs[0]], [client]);
 								console.log("map sent");
 							});
 						} else {
