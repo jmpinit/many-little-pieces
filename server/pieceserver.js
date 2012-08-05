@@ -6,6 +6,21 @@ var users = db.collection('users');
 
 console.log("world initialized");
 
+function commandLogic(type, data ){
+	
+	switch(type) {
+	
+	case MOVE_RIGHT:
+		break;	
+	case MOVE_LEFT:
+		break;
+	case MOVE_UP:
+		break;
+	case MOVE_DOWN:
+	}
+}
+
+
 var PieceServer = Maple.Class(function(clientClass) {
 	Maple.Server(this, clientClass);
 
@@ -55,7 +70,7 @@ var PieceServer = Maple.Class(function(clientClass) {
 		//console.log('Message:', client, type, tick);
 		console.log('Message:', data);
 		switch(type) {
-			case protocol.INIT:
+			case protocol.type.INIT:
 				users.find(data.name, function(err, docs) {
 					//if(docs[0].password==data.password) {
 						if(docs.length>0) {
@@ -73,11 +88,13 @@ var PieceServer = Maple.Class(function(clientClass) {
 						//console.log("password failed. was "+data.password+" and should be "+docs[0].password);
 					//}
 				});
-				
+				break;
+			case protocol.type.COMMAND:
+				console.log("Key Pressed");
+				console.log(data); 			
 				break;
 		}
 	},
-
 	requested: function(req, res) {
 		console.log('HTTP Request');
 	},
@@ -88,9 +105,21 @@ var PieceServer = Maple.Class(function(clientClass) {
 });
 
 var protocol = {
-	INIT: 1
+	type: {
+		INIT: 1,
+		COMMAND: 2
+	} ,
+	cmd: {
+		MOVE_UP: 1,
+		MOVE_DOWN: 2,
+		MOVE_LEFT: 3 ,
+		MOVE_RIGHT: 4 ,	
+	}
 };
 
+var commands = {
+		
+}
 var world_info = {
 	SCREEN_W: 32,
 	SCREEN_H: 32
