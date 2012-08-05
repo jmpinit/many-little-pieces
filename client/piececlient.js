@@ -1,10 +1,17 @@
+//check for being fully loaded
+//this.ready = false;
+//window.addEventListener("load", function(this.ready=true;); 
+
 var PieceClient = Class(function() {
     Maple.Client(this, 30, 60);
 }, Maple.Client, {
     started: function() {
         console.log("started");
-	client.send(1, [ {name: "nehal", password: "password"} ]);
+		client.send(1, [ {name: "nehal", password: "password"} ]);
         client._state = 0;
+        
+        imgFont = new Image();
+		imgFont.src = "imgs/the_pieces.png";
     },
 
     update: function(t, tick) {
@@ -12,7 +19,7 @@ var PieceClient = Class(function() {
     },
 
     render: function(t, dt, u) {
-		
+		ctx.drawImage(character, player.sx, player.sy, player.w, player.h, player.x, player.y, player.w, player.h);
     },
 
     stopped: function() {
@@ -25,9 +32,9 @@ var PieceClient = Class(function() {
 
     message: function(type, tick, data) {
         console.log('message:', type, tick, data);
-	var cmd = { name: "success"};
-	client.send(2, [ cmd ]);
-        return true; // return true to mark this message as handled
+		var cmd = { name: "success"};
+		client.send(2, [ cmd ]);
+        return true;
     },
 
     syncedMessage: function(type, tick, data) {
