@@ -2,6 +2,18 @@ function TextView(w, h) {
 	this.width = w;
 	this.height = h;
 	
+	//load thefont
+	fontImage.src = "imgs/the_pieces.png";
+ 
+	//check for being fully loaded
+	this.ready = false;
+	window.addEventListener("load", function(this.ready=true;); 
+ 
+	function init(){
+		//we're ready for the loop
+		setInterval(loop, 1000 / 30);
+	}
+	
 	this.map = new Array();
 }
 
