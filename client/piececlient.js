@@ -36,9 +36,8 @@ var PieceClient = Class(function() {
 }, Maple.Client, {
     started: function() {
 		console.log("started");
-
 		//authenticate with server
-		client.send(1, [ {name: "nehal", password: "password"} ]);
+		client.send(protocol.type.INIT, [ {name: "nehal", password: "password"} ]);
 		client._state = 0;
 	},
 
@@ -82,7 +81,6 @@ var PieceClient = Class(function() {
 				inventory.buffer += enemies[i].inventory;
 			}
 			inventory.print();
-			
 			scrnGame.dirty = true;
 		}
 		
@@ -125,5 +123,23 @@ $(document).keydown( function (evt) {
 				break;
 		}
 	}
-});
+}
 
+var protocol = {
+	type: {
+		INIT: 1,
+		COMMAND: 2,
+		WORLD : 3
+	} ,
+	cmd: {
+		MOVE: 1,
+		MINE: 2
+	},
+	dir: {
+		NA: 0, // meaning doesn't apply
+		UP: 1,
+		DOWN: 2,
+		LEFT: 3,
+		RIGHT: 4
+	}
+};
