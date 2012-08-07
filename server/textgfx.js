@@ -46,7 +46,7 @@ TextView.prototype = {
 	
 	clearText: function() {
 		for(var i=0; i<this.text.length; i++) {
-			this.text[i] = " ";
+			this.text = " ";
 		}
 	},
 	
