@@ -1,5 +1,5 @@
 var Maple = require('../Maple/Maple');
-var game = require("piecegame.js");
+var game = require("./piecegame.js");
 
 //CONSTANTS
 const WORLD = {
@@ -63,7 +63,7 @@ var PieceServer = Maple.Class(function(clientClass) { Maple.Server(this, clientC
 function info(msg) { console.log("INFO: "+msg); }
 
 var protocol = {
-	COMMAND: 1	//player action
+	COMMAND: 1,	//player action
 	INFO: 2		//stats
 };
 

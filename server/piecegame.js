@@ -45,5 +45,5 @@ FileSystem.prototype = {
 }
 
 //EXPORTS
-
+exports.World = World;
 exports.Player = Player;
