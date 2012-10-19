@@ -147,7 +147,7 @@ CPU.prototype = {
 	},
 	
 	reset: function() {
-		this.code = "#A0#D16#C14#B1+AB>AD_C_E";
+		this.code = "#A0#D16#C14#B1+AB=AD_C!";
 		
 		this.mem = new ArrayBuffer(this.memSize);
 		this.memView = new Int16Array(this.mem);
