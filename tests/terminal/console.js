@@ -1,8 +1,9 @@
 function Console(scrn, processor) {
 	this.buffer = "";
-	this.limit = 64;
 	this.screen = scrn;
 	this.process = processor;
+	
+	this.limit = this.screen.width*this.screen.height;
 	
 	this.x = 0;
 	this.y = 0;
@@ -10,6 +11,8 @@ function Console(scrn, processor) {
 	this.cursor = false;
 	
 	setInterval(this.flash.bind(this), 300);
+	
+	this.print(">");
 }
 
 Console.prototype = {
