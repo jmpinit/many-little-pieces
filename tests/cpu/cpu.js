@@ -87,19 +87,31 @@ CPU.prototype = {
 				this.pc = 0;
 				break;
 			case "<":	//skip if less
+				dest = this.next(1); src = this.next(2);
+				if(this.getreg(dest)<this.getreg(src)) { this.pc += 4; } else { this.pc += 3; }
 				break;
 			case "=":	//skip if equal
+				dest = this.next(1); src = this.next(2);
+				if(this.getreg(dest)==this.getreg(src)) { this.pc += 4; } else { this.pc += 3; }
 				break;
 			case ">":	//skip if greater
+				dest = this.next(1); src = this.next(2);
+				if(this.getreg(dest)>this.getreg(src)) { this.pc += 4; } else { this.pc += 3; }
 				break;
 			case "_":	//jump to immediate address
+				dest = this.next(1);
+				this.pc = this.getreg(dest);
 				break;
 			case "$":	//jump to relative address
+				dest = this.next(1);
+				this.pc += this.getreg(dest);
 				break;
 				
 			default:
 				this.pc += 1;
 		}
+		
+		this.pc = this.pc%this.code.length;
 	},
 	
 	next: function(i) {
@@ -135,8 +147,8 @@ CPU.prototype = {
 	},
 	
 	reset: function() {
-		this.code = "#A64#B8%AB!";
-	
+		this.code = "#A0#D16#C14#B1+AB>AD_C_E";
+		
 		this.mem = new ArrayBuffer(this.memSize);
 		this.memView = new Int16Array(this.mem);
 		
