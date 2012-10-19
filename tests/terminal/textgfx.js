@@ -56,6 +56,12 @@ TextView.prototype = {
 			var row = Math.floor(i/10);
 			var col = i-row*10;
 			
+			/*row = 2;
+			col = 4;
+			var w = 11;
+			var h = 12;
+			
+			ctx.drawImage(this.font, col*w, row*h, w, h, x, y, w, h);*/
 			ctx.drawImage(this.font, col*this.symWidth, row*this.symHeight, this.symWidth, this.symHeight, x, y, this.symWidth, this.symHeight);
 		}
 	}

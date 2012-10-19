@@ -1,0 +1,27 @@
+!"#$%'()*+,-./:;<=>?[\]^_`{|}~
+"',.:;?\`
+
+Data handling and Memory operations
+# set reg to immediate
+()[]{}
+
+Arithmetic and Logic
++ add
+- subtract
+* multiply
+/ divide
+% modulo
+
+~ logical negate
+| logical OR
+& logical AND
+^ logical NOT
+! logical NOR
+
+Control flow
+< skip if less than
+= skip if equal
+> skip if greater than
+
+_ jump to immediate address
+$ jump to relative address
