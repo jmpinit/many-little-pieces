@@ -13,8 +13,8 @@ function eventLoaded() {
 	cvsGame = document.getElementById("game_screen");
 	cvsConsole = document.getElementById("game_console");
 	
-	scrnGame = new TextView(cvsGame, Math.floor(cvsGame.width/11), Math.floor(cvsGame.height/13), imgFont, 11, 13);
-	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/11), Math.floor(cvsConsole.height/13), imgFont, 11, 13);
+	//scrnGame = new TextView(cvsGame, Math.floor(cvsGame.width/11), Math.floor(cvsGame.height/13), imgFont, 10, 12);
+	scrnConsole = new TextView(cvsConsole, Math.floor(cvsConsole.width/10), Math.floor(cvsConsole.height/12), imgFont, 10, 12);
 	
 	con = new Console(scrnConsole, function(command) { client.send(4, [ command ]); });
 	

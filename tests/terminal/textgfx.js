@@ -38,7 +38,7 @@ TextView.prototype = {
 	
 	putText: function(x, y, c) {
 		if(x>=0&&x<this.width&&y>=0&&y<this.height) {
-			if(c.length==1) {
+			if(typeof c != 'undefined' && c.length==1) {
 				this.text[y*this.width+x] = c;
 			}
 		}
@@ -52,7 +52,7 @@ TextView.prototype = {
 	
     drawText: function(ctx, x, y, c) {
 		var i = c.charCodeAt(0)-32;
-		if(i>=0 && i<=94) {
+		if(i>=0 && i<=99) {
 			var row = Math.floor(i/10);
 			var col = i-row*10;
 			
@@ -62,6 +62,7 @@ TextView.prototype = {
 			var h = 12;
 			
 			ctx.drawImage(this.font, col*w, row*h, w, h, x, y, w, h);*/
+			//ctx.drawImage(this.font, col*this.symWidth, row*this.symHeight, this.symWidth, this.symHeight, x, y, this.symWidth, this.symHeight);
 			ctx.drawImage(this.font, col*this.symWidth, row*this.symHeight, this.symWidth, this.symHeight, x, y, this.symWidth, this.symHeight);
 		}
 	}
