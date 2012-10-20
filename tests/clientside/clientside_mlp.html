@@ -1,0 +1,35 @@
+<!doctype html><!--NOT WORKING!!!!-->
+<html>
+	<head>
+		<title>Clientside MLP</title>
+
+		<script src="res/jquery.min.js" type="text/javascript"></script>
+		
+		<script type="text/javascript" src="textgfx.js"></script>
+		<script type="text/javascript" src="console.js"></script>
+		<script type="text/javascript" src="game.js"></script>
+		<script type="text/javascript" src="clientside_mlp.js"></script>
+
+		<link href='res/font.css' rel='stylesheet' type='text/css'>
+		<link href="clientside_mlp.css" type="text/css" rel="stylesheet" />
+
+		<meta charset="utf-8">
+	</head>
+	
+	<body bgcolor="black" onload="eventLoaded()">
+		
+			<h1>Many Little Pieces</h1>
+			
+			<div id='main'>
+				<canvas id="game_screen" width="512" height="350" onclick="focusOnGame()"></canvas>
+				<div style="float: right;">
+					<p style="border: white 5px solid; width: 200px; margin: 0px; margin-top: 5px; margin-left: 5px;">inventory</p>
+					<canvas id="game_inventory" width="200" height="484"></canvas>
+				</div>
+				<canvas id="game_console" width="512" height="150" onclick="focusOnConsole()"></canvas>
+			</div>
+		
+		<br>
+		<img id="img_font" src="imgs/the_pieces.png">
+	</body>
+</html>
